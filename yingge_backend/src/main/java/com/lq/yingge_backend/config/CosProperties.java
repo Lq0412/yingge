@@ -11,10 +11,16 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "cos.client")
 public class CosProperties {
 
+    /**
+     * 访问域名，形如 https://bucket.cos.region.myqcloud.com
+     */
     private String host;
+
     private String region;
+
     private String bucket;
+
     private String secretId;
+
     private String secretKey;
 }
-

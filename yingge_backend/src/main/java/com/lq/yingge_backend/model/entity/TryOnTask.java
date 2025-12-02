@@ -11,29 +11,29 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@TableName("user")
-public class User {
+@TableName("try_on_task")
+public class TryOnTask {
 
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    private String userAccount;
+    private Long userId;
 
-    private String userPassword;
+    private String personImageUrl;
 
-    private String userName;
+    private String clothImageUrl;
 
-    private String userAvatar;
+    private String resultImageUrl;
 
-    private String userProfile;
+    private String prompt;
 
-    private String userRole;
+    private String status;
+
+    private String errorMsg;
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
-
-    private Integer isDelete;
 }

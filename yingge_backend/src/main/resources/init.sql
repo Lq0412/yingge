@@ -35,13 +35,18 @@ CREATE TABLE IF NOT EXISTS `try_on_record` (
     CONSTRAINT `fk_try_on_record_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='try-on record table';
 
-CREATE TABLE IF NOT EXISTS `storage` (
-    `storage_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT 'storage record id',
-    `file_name` VARCHAR(255) NOT NULL COMMENT 'original file name',
-    `file_path` VARCHAR(500) NOT NULL COMMENT 'stored file url/path',
-    `file_type` VARCHAR(50) NOT NULL COMMENT 'person/cloth/result etc.',
-    `upload_time` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'uploaded at',
-    PRIMARY KEY (`storage_id`),
-    KEY `idx_storage_file_type` (`file_type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='image storage table';
-
+CREATE TABLE IF NOT EXISTS `try_on_task` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT 'task id',
+    `user_id` BIGINT NOT NULL COMMENT 'user id',
+    `person_image_url` VARCHAR(500) NOT NULL COMMENT 'person image url',
+    `cloth_image_url` VARCHAR(500) NOT NULL COMMENT 'cloth image url',
+    `result_image_url` VARCHAR(500) DEFAULT NULL COMMENT 'result image url',
+    `prompt` VARCHAR(500) DEFAULT NULL COMMENT 'custom prompt',
+    `status` VARCHAR(50) DEFAULT 'pending' COMMENT 'pending/processing/done/failed',
+    `error_msg` VARCHAR(500) DEFAULT NULL COMMENT 'error message',
+    `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'created at',
+    `update_time` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'updated at',
+    PRIMARY KEY (`id`),
+    KEY `idx_task_user` (`user_id`),
+    KEY `idx_task_status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='async try-on task table';

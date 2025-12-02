@@ -1,10 +1,11 @@
 package com.lq.yingge_backend.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.lq.yingge_backend.mapper.UserMapper;
 import com.lq.yingge_backend.model.dto.UserLoginRequest;
 import com.lq.yingge_backend.model.dto.UserRegisterRequest;
 import com.lq.yingge_backend.model.entity.User;
 import com.lq.yingge_backend.model.vo.UserVO;
-import com.lq.yingge_backend.repository.UserRepository;
 import com.lq.yingge_backend.service.UserService;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ import org.springframework.util.StringUtils;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -37,8 +38,10 @@ public class UserServiceImpl implements UserService {
         if (userPassword.length() < 6) {
             throw new IllegalArgumentException("密码长度不能少于6位");
         }
-        boolean exists = userRepository.existsByUserAccountAndIsDelete(userAccount, 0);
-        if (exists) {
+        Long count = userMapper.selectCount(new LambdaQueryWrapper<User>()
+                .eq(User::getUserAccount, userAccount)
+                .eq(User::getIsDelete, 0));
+        if (count != null && count > 0) {
             throw new IllegalArgumentException("账号已存在");
         }
         User user = new User();
@@ -47,8 +50,8 @@ public class UserServiceImpl implements UserService {
         user.setUserName(request.getUserName());
         user.setUserRole("user");
         user.setIsDelete(0);
-        User saved = userRepository.save(user);
-        return toUserVO(saved);
+        userMapper.insert(user);
+        return toUserVO(user);
     }
 
     @Override
@@ -61,9 +64,10 @@ public class UserServiceImpl implements UserService {
         if (!StringUtils.hasText(userAccount) || !StringUtils.hasText(userPassword)) {
             throw new IllegalArgumentException("账号或密码不能为空");
         }
-        User user = userRepository.findByUserAccountAndIsDelete(userAccount, 0)
-                .orElseThrow(() -> new IllegalArgumentException("账号或密码错误"));
-        if (!passwordEncoder.matches(userPassword, user.getUserPassword())) {
+        User user = userMapper.selectOne(new LambdaQueryWrapper<User>()
+                .eq(User::getUserAccount, userAccount)
+                .eq(User::getIsDelete, 0));
+        if (user == null || !passwordEncoder.matches(userPassword, user.getUserPassword())) {
             throw new IllegalArgumentException("账号或密码错误");
         }
         return toUserVO(user);
@@ -79,4 +83,3 @@ public class UserServiceImpl implements UserService {
         return vo;
     }
 }
-
