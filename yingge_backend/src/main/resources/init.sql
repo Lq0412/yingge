@@ -50,3 +50,27 @@ CREATE TABLE IF NOT EXISTS `try_on_task` (
     KEY `idx_task_user` (`user_id`),
     KEY `idx_task_status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='async try-on task table';
+
+CREATE TABLE IF NOT EXISTS `cloth_template` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT 'template id',
+    `name` VARCHAR(255) NOT NULL COMMENT 'template name',
+    `image_url` VARCHAR(500) NOT NULL COMMENT 'cloth image url',
+    `mask_url` VARCHAR(500) DEFAULT NULL COMMENT 'optional cutout mask url',
+    `category` VARCHAR(100) DEFAULT NULL COMMENT 'category such as wuxia/wedding/modern',
+    `style_tags` JSON DEFAULT NULL COMMENT 'style tags as json array text',
+    `color` VARCHAR(50) DEFAULT NULL COMMENT 'main color',
+    `fit` VARCHAR(50) DEFAULT NULL COMMENT 'fit type',
+    `prompt` TEXT DEFAULT NULL COMMENT 'default prompt',
+    `negative_prompt` TEXT DEFAULT NULL COMMENT 'default negative prompt',
+    `strength` DECIMAL(4,2) DEFAULT NULL COMMENT 'img2img strength',
+    `aspect_ratio` VARCHAR(20) DEFAULT NULL COMMENT 'e.g. 3:4',
+    `status` TINYINT DEFAULT 1 COMMENT '0=off 1=on 2=gray',
+    `sort` INT DEFAULT 0 COMMENT 'manual weight',
+    `lang` VARCHAR(16) DEFAULT 'zh-CN' COMMENT 'language code',
+    `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'created at',
+    `update_time` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'updated at',
+    PRIMARY KEY (`id`),
+    KEY `idx_template_status` (`status`),
+    KEY `idx_template_category` (`category`),
+    KEY `idx_template_sort` (`sort`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='cloth template table';

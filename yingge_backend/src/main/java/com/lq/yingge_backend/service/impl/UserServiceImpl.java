@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("两次输入的密码不一致");
         }
         if (userPassword.length() < 6) {
-            throw new IllegalArgumentException("密码长度不能少于6位");
+            throw new IllegalArgumentException("密码长度不能少于 6 位");
         }
         Long count = userMapper.selectCount(new LambdaQueryWrapper<User>()
                 .eq(User::getUserAccount, userAccount)
