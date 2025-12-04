@@ -36,6 +36,20 @@
 - Strength clamp: 0.30-0.90; default 0.65; aspect_ratio default 3:4.
 - Validate prompt length <=1000 chars; sanitize for sensitive terms.
 
+### Yingge (英歌舞) Presets
+- Core structure: keep a stable base prompt (studio lighting, clean background, keep same person) + Yingge-style block (traditional / modern / youth / female warrior) + generic negative prompt.
+- Base block example: `full-body portrait of the same person standing, studio lighting, clean plain background, high detail, keep original face and body shape, natural skin tone, no face replacement`.
+- Yingge style blocks (can be used as `prompt` fragments in templates):
+  - Traditional team member: `Chaoshan Yingge folk dance costume, traditional red and black warrior uniform, bold golden embroidery, wide belt, layered shoulder armor details, dynamic yet ceremonial stage outfit`.
+  - Hero leader: `heroic Yingge warrior inspired by Water Margin heroes, heavier armor-like costume, darker red and black palette, metal-like trims, commanding presence, rich historical details`.
+  - City remix: `modern streetwear reinterpretation of Chaoshan Yingge costume, bomber jacket with Yingge patterns, sporty pants, sneakers, neon accent colors, fusion of tradition and urban fashion`.
+  - Campus collab: `youthful Yingge-inspired casual outfit, varsity jacket with Yingge embroidery, relaxed fit pants, fresh and bright colors, suitable for campus and daily wear`.
+  - Female warrior: `female Yingge warrior inspired outfit, light armor dress silhouette, waist-emphasized tailoring, flowing lower part, auspicious red and gold color scheme, elegant yet powerful`.
+- Recommended "standard Yingge try-on" full prompt (for official templates / default case):
+  - `full-body portrait of the same person standing, studio lighting, clean plain background, high detail, wearing a Chaoshan Yingge folk dance warrior costume, traditional red and black uniform with bold golden embroidery, wide belt, layered shoulder armor, structured sleeves, thick fabric texture, details clearly visible, heroic and energetic pose, cinematic but realistic style, keep original face and body shape, natural skin tone, no face replacement`.
+- Recommended negative prompt (can be reused across Yingge templates):
+  - `blurry, low resolution, extra limbs, extra hands, extra fingers, distorted face, face replacement, different person, deformed body, cropped head, watermark, logo, text, noisy background, heavy makeup covering face, wrong ethnicity`.
+
 ## Seed Data
 - Prepare 5-10 official cloth templates with imageUrl + category/style/color + sort; store in data/cloth_templates_seed.json; import on boot/dev.
 - If maskUrl available (pre-cut), include to improve compositing quality.
@@ -59,3 +73,6 @@
 - 新增批量导入接口 `/api/cloth/templates/batch`，便于导入种子数据（示例见 docs/cloth_templates_seed.json）。
 - `ClothTemplate` entity/mapper/service/controller in codebase; MyBatis-Plus pagination ready。
 - Frontend can now pull templates and send `clothImageUrl (+ maskUrl)` plus optional prompt/strength to existing try-on API.
+
+## 当前前端进度
+- 今天主要进行前端开发，推进页面和交互相关内容，后续继续完善并与后端接口联调。
